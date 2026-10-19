@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1D4ED8" />
+      <stop offset="100%" stop-color="#1E40AF" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="112" fill="url(#grad)" />
+  <!-- Inner circular clock dial -->
+  <circle cx="256" cy="256" r="160" fill="#ffffff" filter="url(#shadow)" />
+  <!-- Clock ticks -->
+  <circle cx="256" cy="136" r="8" fill="#1E40AF" />
+  <circle cx="256" cy="376" r="8" fill="#1E40AF" />
+  <circle cx="136" cy="256" r="8" fill="#1E40AF" />
+  <circle cx="376" cy="256" r="8" fill="#1E40AF" />
+  <!-- Clock hands set to 08:00 (duty start) -->
+  <!-- Hour hand pointing to 8 o'clock (240 deg) -->
+  <line x1="256" y1="256" x2="178" y2="301" stroke="#1D4ED8" stroke-width="22" stroke-linecap="round" />
+  <!-- Minute hand pointing to 12 o'clock (0 deg) -->
+  <line x1="256" y1="256" x2="256" y2="155" stroke="#1D4ED8" stroke-width="16" stroke-linecap="round" />
+  <!-- Center cap -->
+  <circle cx="256" cy="256" r="18" fill="#1D4ED8" />
+  <circle cx="256" cy="256" r="8" fill="#ffffff" />
+  <!-- Small punch indicator badge -->
+  <circle cx="370" cy="370" r="48" fill="#16A34A" stroke="#ffffff" stroke-width="8" filter="url(#shadow)" />
+  <path d="M352 370l12 12 24-24" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

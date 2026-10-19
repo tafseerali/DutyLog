@@ -1,0 +1,190 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with display name, email, and optional export token for Excel sharing",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "User display name",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 200
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the user account was created"
+        },
+        "exportToken": {
+          "type": "string",
+          "description": "32-character random token for Excel sharing, or empty/null",
+          "maxLength": 64
+        }
+      },
+      "required": ["displayName", "email"]
+    },
+    "UserSettings": {
+      "title": "UserSettings",
+      "description": "User duty hours and weekly off configuration",
+      "type": "object",
+      "properties": {
+        "dutyStart": {
+          "type": "string",
+          "description": "Duty start time in HH:mm 24-hour format",
+          "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+        },
+        "dutyEnd": {
+          "type": "string",
+          "description": "Duty end time in HH:mm 24-hour format",
+          "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+        },
+        "weeklyOff": {
+          "type": "number",
+          "description": "Weekly off day index from 0 (Sunday) to 6 (Saturday)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last updated timestamp"
+        }
+      },
+      "required": ["dutyStart", "dutyEnd", "weeklyOff"]
+    },
+    "DayRecord": {
+      "title": "DayRecord",
+      "description": "Daily punch in and punch out attendance record",
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "Date formatted as YYYY-MM-DD",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "inAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "IN punch timestamp"
+        },
+        "outAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "OUT punch timestamp or null"
+        },
+        "source": {
+          "type": "string",
+          "description": "Record source",
+          "enum": ["auto", "manual"]
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional note",
+          "maxLength": 200
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["date", "source"]
+    },
+    "DayMark": {
+      "title": "DayMark",
+      "description": "Leave or Holiday marker for a specific day",
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "Date formatted as YYYY-MM-DD",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "type": {
+          "type": "string",
+          "description": "Mark type",
+          "enum": ["leave", "holiday"]
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional note",
+          "maxLength": 200
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["date", "type"]
+    },
+    "ExportDocument": {
+      "title": "ExportDocument",
+      "description": "Ready-made CSV attendance data export for Excel integration",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Owner user ID",
+          "maxLength": 128
+        },
+        "month": {
+          "type": "string",
+          "description": "Month in YYYY-MM format",
+          "pattern": "^[0-9]{4}-[0-9]{2}$"
+        },
+        "daysCsv": {
+          "type": "string",
+          "description": "Full monthly CSV text for days breakdown",
+          "maxLength": 50000
+        },
+        "summaryCsv": {
+          "type": "string",
+          "description": "CSV text for monthly summary statistics",
+          "maxLength": 5000
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last updated timestamp"
+        }
+      },
+      "required": ["uid", "month", "daysCsv", "summaryCsv"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "UserProfile",
+      "description": "Private user profile"
+    },
+    "/users/{uid}/settings/main": {
+      "schema": "UserSettings",
+      "description": "User duty hours and work calendar settings"
+    },
+    "/users/{uid}/records/{dateKey}": {
+      "schema": "DayRecord",
+      "description": "User punch records keyed by date YYYY-MM-DD"
+    },
+    "/users/{uid}/marks/{dateKey}": {
+      "schema": "DayMark",
+      "description": "User day marks (leave/holiday) keyed by date YYYY-MM-DD"
+    },
+    "/exports/{exportId}": {
+      "schema": "ExportDocument",
+      "description": "Exported attendance CSV documents for Power Query / Excel sharing"
+    }
+  }
+}

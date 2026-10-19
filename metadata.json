@@ -1,0 +1,6 @@
+{
+  "name": "DutyLog",
+  "description": "Personal Work Hours Tracker with one-tap punch IN/OUT, automatic overtime and duty hours calculation, monthly summaries, and Excel integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
