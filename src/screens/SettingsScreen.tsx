@@ -22,7 +22,7 @@ import {
 import { PWAInstallBanner } from '../components/PWAInstallBanner';
 
 export const SettingsScreen: React.FC = () => {
-  const { user, profile, updateName, signOut } = useAuth();
+  const { user, profile, sessionExpiresAt, updateName, signOut } = useAuth();
   const {
     settings,
     updateSettings,
@@ -202,6 +202,15 @@ export const SettingsScreen: React.FC = () => {
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 text-sm font-medium"
             />
           </div>
+
+          {sessionExpiresAt && (
+            <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-800 flex items-center justify-between">
+              <span className="font-semibold">Session Status:</span>
+              <span className="font-bold">
+                Valid until {new Date(sessionExpiresAt).toLocaleDateString()} (Auto-renews)
+              </span>
+            </div>
+          )}
         </div>
       </div>
 

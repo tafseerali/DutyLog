@@ -7,9 +7,16 @@ export const AuthScreen: React.FC = () => {
 
   const [mode, setMode] = useState<'signin' | 'signup' | 'forgot'>('signin');
   const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>(() => {
+    try {
+      return localStorage.getItem('dutylog_remembered_email') || '';
+    } catch {
+      return '';
+    }
+  });
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [remember30Days, setRemember30Days] = useState<boolean>(true);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +69,7 @@ export const AuthScreen: React.FC = () => {
     } else {
       setLoading(true);
       try {
-        await signIn(email, password);
+        await signIn(email, password, remember30Days);
       } catch (err: any) {
         setError(err.message || 'Invalid email or password');
       } finally {
@@ -182,6 +189,24 @@ export const AuthScreen: React.FC = () => {
                 <span className="text-[10px] text-slate-400 mt-1 block">
                   Must be at least 6 characters
                 </span>
+              )}
+
+              {mode === 'signin' && (
+                <div className="flex items-center gap-2 pt-2">
+                  <input
+                    type="checkbox"
+                    id="remember30"
+                    checked={remember30Days}
+                    onChange={(e) => setRemember30Days(e.target.checked)}
+                    className="w-4 h-4 rounded-md text-blue-700 border-slate-300 focus:ring-blue-600 cursor-pointer"
+                  />
+                  <label
+                    htmlFor="remember30"
+                    className="text-xs font-medium text-slate-700 cursor-pointer select-none"
+                  >
+                    Stay signed in for 30 days (Recommended)
+                  </label>
+                </div>
               )}
             </div>
           )}

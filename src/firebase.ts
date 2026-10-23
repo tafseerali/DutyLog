@@ -1,5 +1,10 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import {
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  indexedDBLocalPersistence
+} from 'firebase/auth';
 import {
   initializeFirestore,
   persistentLocalCache,
@@ -12,6 +17,13 @@ import firebaseConfig from '../firebase-applet-config.json';
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 export const auth = getAuth(app);
+
+// Explicitly configure persistent session storage so login survives across browser/phone restarts for months
+setPersistence(auth, browserLocalPersistence).catch(() => {
+  setPersistence(auth, indexedDBLocalPersistence).catch((err) => {
+    console.warn('Could not set auth persistence:', err);
+  });
+});
 
 // Initialize Firestore with offline persistence
 export const db = initializeFirestore(app, {
